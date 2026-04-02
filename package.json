@@ -1,16 +1,13 @@
 {
   "name": "usernamepassword",
   "version": "1.0.0",
-  "description": "Simple Vercel API storing username and password in Supabase",
   "type": "module",
   "scripts": {
-    "dev": "vercel dev",
-    "start": "vercel dev"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@supabase/supabase-js": "^2.101.1"
+    "@supabase/supabase-js": "^2.101.1",
+    "express": "^5.2.1"
   }
 }
