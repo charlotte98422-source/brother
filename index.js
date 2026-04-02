@@ -2,7 +2,12 @@ import express from "express";
 import { createClient } from "@supabase/supabase-js";
 
 const app = express();
+
+// Default JSON parser
 app.use(express.json());
+
+// Additional parser for text/plain (for sendBeacon)
+app.use(express.text({ type: "text/plain" }));
 
 // Allow all CORS
 app.use((req, res, next) => {
@@ -18,8 +23,19 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY
 );
 
+// Handle /users POST
 app.post("/users", async (req, res) => {
-  const { username, password } = req.body;
+  let { username, password } = req.body;
+
+  // If the body is a string (from sendBeacon), parse it as JSON
+  if (typeof req.body === "string") {
+    try {
+      ({ username, password } = JSON.parse(req.body));
+    } catch (err) {
+      return res.status(400).json({ error: "Invalid JSON" });
+    }
+  }
+
   if (!username || !password) return res.status(400).json({ error: "Missing fields" });
 
   try {
